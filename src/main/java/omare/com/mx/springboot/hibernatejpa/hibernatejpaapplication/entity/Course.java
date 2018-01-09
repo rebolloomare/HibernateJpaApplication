@@ -1,5 +1,5 @@
 /**
- * Person.java Fecha de creacion: 19/12/2017, 19:49:27 Copyright (c) 2017 Omar Rebollo Todos
+ * Course.java Fecha de creacion: 08/01/2018, 14:29:59 Copyright (c) 2018 Omar Rebollo Todos
  * los derechos reservados. Este software es informacion confidencial, propiedad de Omar
  * Rebollo. Esta informacion confidencial no debera ser divulgada y solo se podra utilizar de
  * acuerdo a los terminos que determine la propia persona.
@@ -7,11 +7,11 @@
 package omare.com.mx.springboot.hibernatejpa.hibernatejpaapplication.entity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,9 +23,11 @@ import org.hibernate.annotations.UpdateTimestamp;
  * @since
  */
 @Entity
-@NamedQuery(name = "find_all_persons", query = "select p from Person p")
-
-public class Person {
+@NamedQueries(
+	value = { @NamedQuery(name = "find_all_courses", query = "Select c from Course c"),
+		@NamedQuery(name = "find_namedQuery_course",
+			query = "Select c from Course c where name like '%ava'") })
+public class Course {
 
 	@Id
 	@GeneratedValue
@@ -33,11 +35,6 @@ public class Person {
 
 	@Column(nullable = false)
 	private String name;
-
-	private String location;
-
-	@Column(name = "BIRTH_DATE")
-	private Date birthDate;
 
 	@Column(name = "CREATED_DATE")
 	@UpdateTimestamp
@@ -47,44 +44,8 @@ public class Person {
 	@CreationTimestamp
 	private LocalDateTime createdDate;
 
-	/**
-	 * TODO [Agregar documentacion al metodo]
-	 * @author Omar Rebollo (omar.rebollo@gmail.com)
-	 */
-
-	public Person() {
-	}
-
-	/**
-	 * TODO [Agregar documentacion al metodo]
-	 * @author Omar Rebollo (omar.rebollo@gmail.com)
-	 * @param name
-	 * @param location
-	 * @param birthDate
-	 */
-
-	public Person(String name, String location, Date birthDate) {
-		super();
-		this.name = name;
-		this.location = location;
-		this.birthDate = birthDate;
-	}
-
-	/**
-	 * TODO [Agregar documentacion al metodo]
-	 * @author Omar Rebollo (omar.rebollo@gmail.com)
-	 * @param i
-	 * @param string
-	 * @param string2
-	 * @param date
-	 */
-
-	public Person(Long id, String name, String location, Date birthDate) {
-		this.id = id;
-		this.name = name;
-		this.location = location;
-		this.birthDate = birthDate;
-	}
+	@Column(name = "IS_DELETED")
+	private Boolean isDeleted;
 
 	/**
 	 * @return el atributo id
@@ -115,34 +76,6 @@ public class Person {
 	}
 
 	/**
-	 * @return el atributo location
-	 */
-	public String getLocation() {
-		return location;
-	}
-
-	/**
-	 * @param location parametro location a actualizar
-	 */
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	/**
-	 * @return el atributo birthDate
-	 */
-	public Date getBirthDate() {
-		return birthDate;
-	}
-
-	/**
-	 * @param birthDate parametro birthDate a actualizar
-	 */
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	/**
 	 * @return el atributo lastUpdatedDate
 	 */
 	public LocalDateTime getLastUpdatedDate() {
@@ -170,6 +103,20 @@ public class Person {
 		this.createdDate = createdDate;
 	}
 
+	/**
+	 * @return el atributo isDeleted
+	 */
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	/**
+	 * @param isDeleted parametro isDeleted a actualizar
+	 */
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
 	/*
 	 * La documentacion de este metodo se encuentra en la clase o interface que lo declara
 	 * (non-Javadoc)
@@ -178,18 +125,16 @@ public class Person {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Person [id=")
+		builder.append("Course [id=")
 			.append(id)
 			.append(", name=")
 			.append(name)
-			.append(", location=")
-			.append(location)
-			.append(", birthDate=")
-			.append(birthDate)
 			.append(", lastUpdatedDate=")
 			.append(lastUpdatedDate)
 			.append(", createdDate=")
 			.append(createdDate)
+			.append(", isDeleted=")
+			.append(isDeleted)
 			.append("]");
 		return builder.toString();
 	}

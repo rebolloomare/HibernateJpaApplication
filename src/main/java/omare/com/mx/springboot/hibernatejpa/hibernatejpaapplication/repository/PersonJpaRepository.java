@@ -36,7 +36,7 @@ public class PersonJpaRepository {
 	 * @param id
 	 * @return
 	 */
-	public Person findById(int id) {
+	public Person findById(Long id) {
 		return entityManager.find(Person.class, id);
 	}
 
@@ -57,7 +57,12 @@ public class PersonJpaRepository {
 	 * @return
 	 */
 	public Person insert(Person person) {
-		return entityManager.merge(person);
+		if (person.getId() == null) {
+			entityManager.persist(person);
+		} else {
+			entityManager.merge(person);
+		}
+		return person;
 	}
 
 	/**
@@ -65,11 +70,16 @@ public class PersonJpaRepository {
 	 * @author Omar Rebollo (omar.rebollo@gmail.com)
 	 * @param id
 	 */
-	public void deleteById(int id) {
+	public void deleteById(Long id) {
 		Person person = findById(id);
-		entityManager.merge(person);
+		entityManager.remove(person);
 	}
 
+	/**
+	 * TODO [Agregar documentacion al metodo]
+	 * @author Omar Rebollo (omar.rebollo@gmail.com)
+	 * @return
+	 */
 	public List<Person> findAll() {
 		TypedQuery<Person> namedQuery =
 			entityManager.createNamedQuery("find_all_persons", Person.class);
